@@ -1,10 +1,14 @@
-from bs4 import BeautifulSoup#
+from bs4 import BeautifulSoup
 from rightmoveitem import RightMoveItem
 import requests
 import re
+import numpy as np
+import csv as csv
+import sys
+import pandas as pd
+from lxml import html
 
 class _Const(object):
-
 
     def NA(self):
         def fset(self, value):
@@ -15,94 +19,170 @@ class _Const(object):
 
 class RightMoveParser:
 
-    CONST = _Const()
-
-    webpage = "https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%5E904&insId=1&radius=0.0&minPrice=&maxPrice=&minBedrooms=&maxBedrooms=&displayPropertyType=&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false"
-
-    results = []
+    results = None
 
     def __init__(self):
         pass
 
-    def __getSearchPage(self):
-        page = requests.get(self.webpage)
+    def __getSearchPage(self, webpage):
+        """
+        Download (request) the page from the url
+        :param webpage: the url
+        :return: the page
+        """
+        page = requests.get(webpage)
         return page
 
     def __clearData(self):
-        results = []
+        """
+        Clear the results
+        :return: no return valute
+        """
+        self.results = []
 
-    def search(self):
-        self.__clearData();
-        page = self.__getSearchPage()
+    def __get_page(self, page_number, min_price=None, max_price=None):
+        """
+        Private function to get the url for a right move page
+        :param page_number: the page number (1 to 42)
+        :param min_price: the minimum price. Must be a multiple of 10000
+        :param max_price: the maximum price. Must be a multiple of 10000
+        :return: the webpage as a string
+        """
+        if page_number == 1:
+            webpage = "https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=REGION%5E904&includeSSTC=false"
+        else:
+            index = (page_number - 1) * 24
+            webpage = "https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=REGION%5E904&index=" + str(index) + "&includeSSTC=false"
+
+        if min_price or max_price:
+            if max_price:
+                extension = "&maxPrice=" + str(max_price)
+            if min_price:
+                extension = extension + "&minPrice=" + str(min_price)
+            webpage = webpage + extension
+        return webpage
+
+    def search(self, debug=True):
+        """
+        Search through each page
+        :param debug: if debug is true, print info to screen
+        :return: no return value
+        """
+        inc=10000
+        for price in range(0, 50000, inc):
+            if debug:
+                print("From " + str(price) + " to " + str(price + inc))
+            res = self.__search(1, set_page_count=True, min_price=price, max_price=price + inc);
+            if self.results is not None:
+                self.results.append(res)
+            else:
+                self.results = res
+
+            print(self.page_count)
+            for page_number in range(2, self.page_count + 1):
+                if debug:
+                    print("Getting page: " + str(page_number))
+                res = self.__search(page_number, min_price=price, max_price=price + inc)
+                if self.results is not None:
+                    self.results.append(res)
+                else:
+                    self.results = res
+
+    @staticmethod
+    def get_id_regex(idtext):
+        id = int(idtext[len("property-"):])
+        return id
+
+    @staticmethod
+    def get_date_regex(datedesc):
+        pattern = re.compile(r'\d{1,2}/\d{1,2}/\d{4}', re.UNICODE)
+        m = pattern.search(datedesc)
+        if m:
+            date = m.group()
+        else:
+            date = None
+        return date
+
+    @staticmethod
+    def get_price_regex(pricedesc):
+        pattern = re.compile(r'[0-9,]+', re.UNICODE)
+        m = pattern.search(pricedesc)
+        if m:
+            price = m.group().replace(",", "")
+        else:
+            price = None
+        return price
+
+    def __search(self, page_number, clear_data = False, set_page_count=False, min_price=None, max_price=None):
+        """
+        Parse info from page number
+        :param page_number: the page number. Can range from 1 to a maximum of 42 (set by rightmove)
+        :param clear_data: do we want to clear the data in the class. I'll probably remove this parameter
+        :param set_page_count: set the page count (which you can find from each search). the page count is the number
+            of pages for the search parameters
+        :param min_price: the minimum price in the search
+        :param max_price: the maximum price in the search
+        :return: returns the page, otherwise None
+        """
+        if clear_data:
+            self.__clearData();
+        webpage = self.__get_page(page_number, min_price, max_price)
+        page = self.__getSearchPage(webpage)
 
         if page.status_code == 200:
-            soup = BeautifulSoup(page.content, 'html.parser')
+            soup = BeautifulSoup(page.content, 'lxml')
+            tree = html.fromstring(page.content)
 
-            for div in soup.find_all("div", {"id": lambda value : value and value.startswith("property"),
-                                             "class": "l-searchResult" }):
-                idtext = div.attrs.get("id")
-                id = idtext[len("property-"):]
-
-                pricecard = div.find("a", {"class": "propertyCard-priceLink"})
-                if pricecard:
-                    priceDesc = pricecard.text.strip()
-                    if priceDesc:
-                        #pattern = re.compile(r'(.*)\s*(.*)', re.UNICODE)
-                        pattern = re.compile(r'[£0-9,]+', re.UNICODE)
-                        m = pattern.search(priceDesc)
-                        if m:
-                            price = m.group()
-                        else:
-                            price = "N/A"
-
-                propertysection = div.find("div", {"class": "propertyCard-section"})
-                housedesctag = propertysection.find("h2")
-
-                if housedesctag:
-                    housedesc = housedesctag.text.strip()
-                else:
-                    housedesc = "N/A"
-
-                addresstag = div.find("address")
-
-                if addresstag:
-                    spantag = addresstag.find("span")
-                    if spantag:
-                        address = addresstag.text.strip()
+            if set_page_count:
+                span_results_count = soup.find("span", {"class": "searchHeader-resultCount"})
+                if span_results_count:
+                    span_results_count_text = span_results_count.text.strip()
+                    pattern = re.compile(r'[0-9,]+', re.UNICODE)
+                    m = pattern.search(span_results_count_text)
+                    if m:
+                        results_count = int(m.group().replace(",", ""))
+                        self.page_count = int(results_count / 24.0 + 0.5)
                     else:
-                        address = "N/A"
+                        results_count = "N/A"
+                        self.page_count = -1
 
-                branchtag = div.find("div", {"class": "propertyCard-branchSummary"})
+            xp_id = '//*[contains(@id, "property") and starts-with(@class, "l-searchResult")]/@id'
+            xp_desc = '//*[starts-with(@id, "property-")]/div/div[1]/div[4]/div[1]/div[2]/a/h2/text()'
+            xp_price = '//*[starts-with(@id, "property-")]/div/div[1]/div[3]/div/a/div[1]/text()'
+            xp_address = '//*[starts-with(@id, "property-")]/div/div[1]/div[4]/div[1]/div[2]/a/address/span/text()'
+            xp_date_added = '//*[starts-with(@id, "property-")]/div/div[1]/div[4]/div[2]/div[3]/span[1]/text()'
+            xp_agent = '//*[starts-with(@id, "property-")]/div/div[1]/div[4]/div[2]/div[3]/span[2]/text()'
 
-                if branchtag:
-                    datespantag = branchtag.find("span", {"class": "propertyCard-branchSummary-addedOrReduced"})
-                    if datespantag:
-                        datedesc = datespantag.text.strip()
-                        pattern = re.compile(r'\d{1,2}/\d{1,2}/\d{4}', re.UNICODE)
-                        m = pattern.search(datedesc)
-                        if m:
-                            date = m.group()
-                        else:
-                            date = "N/A"
+            id = tree.xpath(xp_id)
+            id[:] = [RightMoveParser.get_id_regex(x) for x in id]
 
-                        pattern = re.compile(r'Reduced', re.UNICODE)
-                        m = pattern.search(datedesc)
-                        if m:
-                            reduced = m.group()
-                        else:
-                            reduced = False
+            desc = tree.xpath(xp_desc)
+            desc[:] = [x.strip() for x in desc]
 
-                    agenttag = div.find("span", {"class": "propertyCard-branchSummary-branchName"})
-                    if agenttag:
-                        agentdesc = agenttag.text.strip()
-                        pattern = re.compile(r'by (.*)', re.UNICODE)
-                        m = pattern.search(agentdesc)
-                        if m:
-                            agent = m.group(1)
-                        else:
-                            agent = "N/A"
+            prices = tree.xpath(xp_price)
+            prices[:] = [RightMoveParser.get_price_regex(x.strip()) for x in prices]
 
-                item = RightMoveItem(id, housedesc, address, price, date, reduced, agent)
-                self.results.append(item)
-        return page.content
+            addresses = tree.xpath(xp_address)
+
+            date_added = tree.xpath(xp_date_added)
+            date_added[:] = [RightMoveParser.get_date_regex(x.strip()) for x in date_added]
+
+            agents = tree.xpath(xp_agent)
+
+
+            data = [id, desc, prices, addresses, date_added, agents]
+            temp_df = pd.DataFrame(data)
+            temp_df = temp_df.transpose()
+            temp_df.columns = ["id", "description", "price", "address", "date added", "agent"]
+
+            temp_df = temp_df[temp_df["address"].notnull()]
+
+            return temp_df
+
+    def save(self, filename):
+        """this function needs fixing"""
+        with open(filename, "w+") as my_csv:
+            csv_writer = csv.writer(my_csv, delimiter=',')
+            csv_writer.writerows([[item.id, item.desc, item.address, item.price, item.date, item.reduced, item.agent] for item in self.results])
+
 
