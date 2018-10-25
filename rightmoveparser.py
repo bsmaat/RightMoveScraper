@@ -89,12 +89,17 @@ class RightMoveParser:
                     self.results = res
 
     @staticmethod
-    def get_id_regex(idtext):
-        id = int(idtext[len("property-"):])
-        return id
+    def get_id_regex(id_text: str) -> int:
+        '''
+        Get id of property
+        :param id_text: 
+        :return: the property id
+        '''
+        property_id = int(id_text[len("property-"):])
+        return property_id
 
     @staticmethod
-    def get_date_regex(datedesc):
+    def get_date_regex(datedesc: str) -> str:
         pattern = re.compile(r'\d{1,2}/\d{1,2}/\d{4}', re.UNICODE)
         m = pattern.search(datedesc)
         if m:
@@ -104,11 +109,11 @@ class RightMoveParser:
         return date
 
     @staticmethod
-    def get_price_regex(pricedesc):
+    def get_price_regex(pricedesc: str) -> int:
         pattern = re.compile(r'[0-9,]+', re.UNICODE)
         m = pattern.search(pricedesc)
         if m:
-            price = m.group().replace(",", "")
+            price = int(m.group().replace(",", ""))
         else:
             price = None
         return price

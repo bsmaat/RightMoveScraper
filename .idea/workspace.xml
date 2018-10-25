@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="20960e9c-fb46-4b25-9aaa-0ae313362d4b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/RightMoveScraper.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RightMoveScraper.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rightmove.py" beforeDir="false" afterPath="$PROJECT_DIR$/rightmove.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rightmoveitem.py" beforeDir="false" afterPath="$PROJECT_DIR$/rightmoveitem.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rightmoveparser.py" beforeDir="false" afterPath="$PROJECT_DIR$/rightmoveparser.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,27 +48,35 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="-2048925971">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="122" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="122" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rightmoveparser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="182" column="37" selection-start-line="182" selection-start-column="37" selection-end-line="182" selection-end-column="37" />
+            <state relative-caret-position="357">
+              <caret line="111" column="47" selection-start-line="111" selection-start-column="47" selection-end-line="111" selection-end-column="47" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
-                <marker date="1540335568939" expanded="true" signature="3260:3478" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/pandas/core/generic.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="1575" selection-start-line="1575" selection-end-line="1575" />
             </state>
           </provider>
         </entry>
@@ -78,11 +84,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rightmoveitem.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
+            <state relative-caret-position="425">
               <caret line="25" selection-start-line="25" selection-end-line="25" />
-              <folding>
-                <marker date="1539419694278" expanded="true" signature="528:530" ph="..." />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -90,11 +93,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rightmove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="36" lean-forward="true" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
-              <folding>
-                <marker date="1540335520391" expanded="true" signature="58:63" ph="..." />
-              </folding>
+            <state relative-caret-position="153">
+              <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -140,6 +140,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -151,10 +152,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -269,16 +270,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1032" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1814346" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18124342" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4994726" weight="0.31685394" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49894515" visible="true" weight="0.39101124" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4994726" visible="true" weight="0.3167028" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49894515" weight="0.39101124" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994726" weight="0.32921347" />
@@ -339,48 +340,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/lib/python3.6/codecs.py">
+    <entry file="file:///usr/lib/python3.6/codecs.py" />
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/pandas/core/generic.py" />
+    <entry file="file://$PROJECT_DIR$/rightmoveparser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="308" selection-start-line="308" selection-end-line="308" />
+        <state relative-caret-position="357">
+          <caret line="111" column="47" selection-start-line="111" selection-start-column="47" selection-end-line="111" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rightmoveitem.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
+        <state relative-caret-position="425">
           <caret line="25" selection-start-line="25" selection-end-line="25" />
-          <folding>
-            <marker date="1539419694278" expanded="true" signature="528:530" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/pandas/core/generic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="1575" selection-start-line="1575" selection-end-line="1575" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rightmove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="36" lean-forward="true" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
-          <folding>
-            <marker date="1540335520391" expanded="true" signature="58:63" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rightmoveparser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="182" column="37" selection-start-line="182" selection-start-column="37" selection-end-line="182" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-            <marker date="1540335568939" expanded="true" signature="3260:3478" ph="..." />
-          </folding>
+        <state relative-caret-position="153">
+          <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
         </state>
       </provider>
     </entry>
