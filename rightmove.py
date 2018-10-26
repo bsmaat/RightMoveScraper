@@ -9,7 +9,10 @@ def start():
         #for item in rightmove.results   :
         #    print(item.to_string())
         print(rightmove.results.values)
+    rightmove.results.to_csv("houses.csv")
     # rightmove.save("houses.csv")
+    print(rightmove.results.shape)
+
     return None
 
 

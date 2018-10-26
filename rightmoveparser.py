@@ -69,12 +69,14 @@ class RightMoveParser:
         :return: no return value
         """
         inc=10000
-        for price in range(0, 50000, inc):
+        for price in range(0, 3000000, inc):
             if debug:
                 print("From " + str(price) + " to " + str(price + inc))
             res = self.__search(1, set_page_count=True, min_price=price, max_price=price + inc);
             if self.results is not None:
-                self.results.append(res)
+                print(self.results.shape)
+                self.results = self.results.append(res)
+                print(self.results.shape)
             else:
                 self.results = res
 
@@ -84,9 +86,16 @@ class RightMoveParser:
                     print("Getting page: " + str(page_number))
                 res = self.__search(page_number, min_price=price, max_price=price + inc)
                 if self.results is not None:
-                    self.results.append(res)
+                    print(self.results.shape)
+                    self.results = self.results.append(res)
+                    print(self.results.shape)
                 else:
                     self.results = res
+
+        self.results = self.results.drop_duplicates(subset=['id'], keep=False)
+        self.results = self.results.reset_index(drop=True)
+        self.results = self.results.sort_values(by='price')
+        return self.results
 
     @staticmethod
     def get_id_regex(id_text: str) -> int:
@@ -99,9 +108,9 @@ class RightMoveParser:
         return property_id
 
     @staticmethod
-    def get_date_regex(datedesc: str) -> str:
+    def get_date_regex(date_desc: str) -> str:
         pattern = re.compile(r'\d{1,2}/\d{1,2}/\d{4}', re.UNICODE)
-        m = pattern.search(datedesc)
+        m = pattern.search(date_desc)
         if m:
             date = m.group()
         else:
@@ -109,16 +118,16 @@ class RightMoveParser:
         return date
 
     @staticmethod
-    def get_price_regex(pricedesc: str) -> int:
+    def get_price_regex(price_desc: str) -> int:
         pattern = re.compile(r'[0-9,]+', re.UNICODE)
-        m = pattern.search(pricedesc)
+        m = pattern.search(price_desc)
         if m:
             price = int(m.group().replace(",", ""))
         else:
             price = None
         return price
 
-    def __search(self, page_number, clear_data = False, set_page_count=False, min_price=None, max_price=None):
+    def __search(self, page_number: int, clear_data=False, set_page_count=False, min_price=None, max_price=None):
         """
         Parse info from page number
         :param page_number: the page number. Can range from 1 to a maximum of 42 (set by rightmove)
